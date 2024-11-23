@@ -1,6 +1,7 @@
 # Imports
 import tkinter as tk
-
+import random
+import glob
 
 
 # Functions
@@ -37,12 +38,18 @@ class game():
 
 	def inGame(s):
 		s.newScreen()
+		
+		txtfiles = glob.glob("textSamples/*")
+		textToType = open(random.choice(txtfiles), 'r').readline()
 
-		textDisplay = tk.Label(s.root, text="Sample Text")
+		textDisplay = tk.Label(s.root, text=f"{textToType}")
 		textDisplay.pack()
 
 		typingBox = tk.Text(s.root)
 		typingBox.pack()
+		
+		finishButton = tk.Button(s.root, text="Finish", command=s.menu)
+		finishButton.pack()
 	
 	# When called, clears all items on the root window.
 	def newScreen(s):

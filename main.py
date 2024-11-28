@@ -1,6 +1,7 @@
 # Imports
 import tkinter as tk
 import tkinter.filedialog as fd
+import time
 import random
 import glob
 
@@ -24,24 +25,31 @@ class game():
 		s.root = tk.Tk()
 		s.root.title("TyPyer - V0.1")
 		s.root.minsize(300, 400)
-		s.accuracy = 0
+		s.accuracy = None
 		s.textDirectory = "textSamples/*" 
-		s.menu()
+		s.menu("0")
 
-	def menu(s):
+	def menu(s, crash):
 		s.newScreen()
 		
 		# Canvas Item Definitions
 		startButton = tk.Button(s.root, text="Start Game", command=s.inGame)
 		settingsButton = tk.Button(s.root, text="Settings Menu", command=s.optionMenu)
 		quitButton = tk.Button(s.root, text="Quit Game", command=lambda: s.root.destroy())
-		accuracyLab = tk.Label(s.root, text=f"Accuracy:  {s.accuracy}%")
 		
 		# Canvas Item Placements
 		startButton.pack()
 		settingsButton.pack()
 		quitButton.pack()
-		accuracyLab.pack()
+
+		# Conditional Items
+		if crash != "0":
+			crashLab = tk.Label(s.root, text=crash)
+			crashLab.pack()
+		if s.accuracy != None:
+			accuracyLab = tk.Label(s.root, text=f"Accuracy:  {s.accuracy}%")
+			accuracyLab.pack()
+			
 
 	def optionMenu(s):
 		s.newScreen()
@@ -50,7 +58,7 @@ class game():
 			s.textDirectory = str(f"{fd.askdirectory()}/*")
 		
 		# Definitions
-		menuButton = tk.Button(s.root, text="Main Menu", command=s.menu)
+		menuButton = tk.Button(s.root, text="Main Menu", command=lambda: s.menu("0"))
 		getDirButton = tk.Button(s.root, text="Select Folder", command=getDir)
 		
 		# Placements
@@ -65,21 +73,30 @@ class game():
 				correctText += 1
 
 		s.accuracy = round((correctText/len(originalText))*100)
-		s.menu()
+		s.menu("0")
 
-	def inGame(s):
+	def inGame(s):	
 		s.newScreen()
 		
+		# TODO Fix Ctrl + Backspace not deleting full words
+		def keyFunc(event):
+			#print(repr(event.char).strip('\n'))
+			# User complete text with return key.
+			if repr(event.char) == "'\\r'":
+				s.assess(textToType,typingBox.get("1.0","end"))
+
 		# Grab random file from directory
-		print(s.textDirectory)
-		txtfiles = glob.glob(s.textDirectory, recursive=True)
-		print(txtfiles)
-		print(random.choice(txtfiles))
-		textToType = open(random.choice(txtfiles), 'r').readline()
+		#print(s.textDirectory)
+		try:
+			txtfiles = glob.glob(s.textDirectory, recursive=True)
+			textToType = open(random.choice(txtfiles), 'r').readline()
+		except:
+			s.menu(bcolors.OKGREEN, f"Invalid folder choice!  Cannot use the directory:  {s.textDirectory}")
 
 		# Definitions
 		textDisplay = tk.Label(s.root, text=f"{textToType}")
 		typingBox = tk.Text(s.root)
+		typingBox.bind("<Key>", keyFunc)
 		finishButton = tk.Button(s.root, text="Finish", command=lambda: s.assess(textToType,typingBox.get("1.0","end")))
 		
 		# Placements
@@ -87,6 +104,7 @@ class game():
 		typingBox.pack()
 		finishButton.pack()
 
+		typingBox.focus_set() # Focus box (user convenience)
 
 	# When called, clears all items on the root window.
 	def newScreen(s):

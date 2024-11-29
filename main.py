@@ -29,7 +29,7 @@ class game():
 
 		# Window
 		s.root = tk.Tk()
-		s.root.title("TyPyer - V0.3")
+		s.root.title("TyPyer - ALPHA")
 		s.root.minsize(400, 300)
 		s.root.maxsize(800,600)
 		s.root.config(bg=s.background)
@@ -40,8 +40,6 @@ class game():
 		s.newScreen()
 
 		# Canvas Item Definitions (Frames then Items)
-		
-
 		startButton = tk.Button(s.root, text="Start Game", bg=s.background, command=s.inGame)
 		settingsButton = tk.Button(s.root, text="Settings Menu", bg=s.background, command=s.optionMenu)
 		quitButton = tk.Button(s.root, text="Quit Game", bg=s.background, command=lambda: s.root.destroy())
@@ -75,7 +73,7 @@ class game():
 		getDirButton.pack(anchor='n', pady=5, expand=True)
 
 
-	def assess(s, originalText, userText):
+	def assessSubmission(s, originalText, userText):
 		correctText = 0
 		for x in range(0, min(len(originalText), len(userText))):
 			if userText[x] == originalText[x]:
@@ -92,7 +90,7 @@ class game():
 			#print(repr(event.char).strip('\n'))
 			# User complete text with return key.
 			if repr(event.char) == "'\\r'":
-				s.assess(textToType,typingBox.get("1.0","end"))
+				s.assessSubmission(textToType,typingBox.get("1.0","end"))
 
 		# Grab random file from directory
 		# TODO Fix selecting folders outside of the TyPyer folder & selecting folders as 'files to open'.
@@ -106,19 +104,20 @@ class game():
 		textDisplay = tk.Label(s.root, text=f"{textToType}", bg=s.background)
 		typingBox = tk.Text(s.root, bg='#eeeeee')
 		typingBox.bind("<Key>", keyFunc)
-		finishButton = tk.Button(s.root, text="Finish", bg=s.background, command=lambda: s.assess(textToType,typingBox.get("1.0","end")))
+		finishButton = tk.Button(s.root, text="Finish", bg=s.background, command=lambda: s.assessSubmission(textToType,typingBox.get("1.0","end")))
 		
 		# Placements
 		textDisplay.pack()
 		typingBox.pack()
 		finishButton.pack()
 
-		typingBox.focus_set() # Focus box (user convenience)
+		typingBox.focus_set() # Bring text box to focus (user convenience)
 
 	# When called, clears all items on the root window.
 	def newScreen(s):
 		for item in s.root.winfo_children():
 			item.destroy()
+
 
 
 # Main

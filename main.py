@@ -22,33 +22,42 @@ class bcolors:
 
 class game():
 	def __init__(s):
-		s.root = tk.Tk()
-		s.root.title("TyPyer - V0.1")
-		s.root.minsize(300, 400)
+		# Vars
+		s.background = '#99aaaa'
 		s.accuracy = None
 		s.textDirectory = "textSamples/*" 
+
+		# Window
+		s.root = tk.Tk()
+		s.root.title("TyPyer - V0.3")
+		s.root.minsize(400, 300)
+		s.root.maxsize(800,600)
+		s.root.config(bg=s.background)
+
 		s.menu("0")
 
 	def menu(s, crash):
 		s.newScreen()
+
+		# Canvas Item Definitions (Frames then Items)
 		
-		# Canvas Item Definitions
-		startButton = tk.Button(s.root, text="Start Game", command=s.inGame)
-		settingsButton = tk.Button(s.root, text="Settings Menu", command=s.optionMenu)
-		quitButton = tk.Button(s.root, text="Quit Game", command=lambda: s.root.destroy())
-		
+
+		startButton = tk.Button(s.root, text="Start Game", bg=s.background, command=s.inGame)
+		settingsButton = tk.Button(s.root, text="Settings Menu", bg=s.background, command=s.optionMenu)
+		quitButton = tk.Button(s.root, text="Quit Game", bg=s.background, command=lambda: s.root.destroy())
+
 		# Canvas Item Placements
-		startButton.pack()
-		settingsButton.pack()
-		quitButton.pack()
+		startButton.pack(anchor='s', expand=True)
+		settingsButton.pack(expand=True)
+		quitButton.pack(anchor='n', expand=True)
 
 		# Conditional Items
 		if crash != "0":
-			crashLab = tk.Label(s.root, text=crash)
-			crashLab.pack()
+			crashLab = tk.Label(s.root, bg=s.background, text=crash)
+			crashLab.pack(anchor='n', expand=True)
 		if s.accuracy != None:
-			accuracyLab = tk.Label(s.root, text=f"Accuracy:  {s.accuracy}%")
-			accuracyLab.pack()
+			accuracyLab = tk.Label(s.root, bg=s.background, text=f"Accuracy:  {s.accuracy}%")
+			accuracyLab.pack(anchor='n', expand=True)
 			
 
 	def optionMenu(s):
@@ -58,12 +67,12 @@ class game():
 			s.textDirectory = str(f"{fd.askdirectory()}/*")
 		
 		# Definitions
-		menuButton = tk.Button(s.root, text="Main Menu", command=lambda: s.menu("0"))
-		getDirButton = tk.Button(s.root, text="Select Folder", command=getDir)
+		menuButton = tk.Button(s.root, text="Main Menu", bg=s.background, command=lambda: s.menu("0"))
+		getDirButton = tk.Button(s.root, text="Select Folder", bg=s.background, command=getDir)
 		
 		# Placements
-		menuButton.pack()
-		getDirButton.pack()
+		menuButton.pack(anchor='s', expand=True)
+		getDirButton.pack(anchor='n', pady=5, expand=True)
 
 
 	def assess(s, originalText, userText):
@@ -86,18 +95,18 @@ class game():
 				s.assess(textToType,typingBox.get("1.0","end"))
 
 		# Grab random file from directory
-		#print(s.textDirectory)
+		# TODO Fix selecting folders outside of the TyPyer folder & selecting folders as 'files to open'.
 		try:
 			txtfiles = glob.glob(s.textDirectory, recursive=True)
 			textToType = open(random.choice(txtfiles), 'r').readline()
 		except:
-			s.menu(bcolors.OKGREEN, f"Invalid folder choice!  Cannot use the directory:  {s.textDirectory}")
+			s.menu(f"Invalid folder choice!  Cannot use the directory:  {s.textDirectory}")
 
 		# Definitions
-		textDisplay = tk.Label(s.root, text=f"{textToType}")
-		typingBox = tk.Text(s.root)
+		textDisplay = tk.Label(s.root, text=f"{textToType}", bg=s.background)
+		typingBox = tk.Text(s.root, bg='#eeeeee')
 		typingBox.bind("<Key>", keyFunc)
-		finishButton = tk.Button(s.root, text="Finish", command=lambda: s.assess(textToType,typingBox.get("1.0","end")))
+		finishButton = tk.Button(s.root, text="Finish", bg=s.background, command=lambda: s.assess(textToType,typingBox.get("1.0","end")))
 		
 		# Placements
 		textDisplay.pack()
@@ -115,4 +124,3 @@ class game():
 # Main
 typyer = game
 typyer().root.mainloop()
-

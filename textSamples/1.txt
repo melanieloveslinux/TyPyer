@@ -1,1 +1,0 @@
-I'm using TyPyer, a very funky typing mini-game.

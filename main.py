@@ -25,13 +25,12 @@ class game():
 		# Vars
 		s.background = '#99aaaa'
 		s.accuracy = None
-		s.textDirectory = "textSamples/*" 
+		s.textDirectory = "defaultTexts/*" 
 
 		# Window
 		s.root = tk.Tk()
 		s.root.title("TyPyer - ALPHA")
 		s.root.minsize(400, 300)
-		s.root.maxsize(800,600)
 		s.root.config(bg=s.background)
 
 		s.menu("0")
@@ -45,9 +44,9 @@ class game():
 		quitButton = tk.Button(s.root, text="Quit Game", bg=s.background, command=lambda: s.root.destroy())
 
 		# Canvas Item Placements
-		startButton.pack(anchor='s', expand=True)
-		settingsButton.pack(expand=True)
-		quitButton.pack(anchor='n', expand=True)
+		startButton.pack(anchor='s', ipady=5, ipadx=10, expand=True)
+		settingsButton.pack(expand=True, ipady=5, ipadx=10)
+		quitButton.pack(anchor='n', ipady=5, ipadx=10, expand=True)
 
 		# Conditional Items
 		if crash != "0":
@@ -96,20 +95,27 @@ class game():
 		# TODO Fix selecting folders outside of the TyPyer folder & selecting folders as 'files to open'.
 		try:
 			txtfiles = glob.glob(s.textDirectory, recursive=True)
-			textToType = open(random.choice(txtfiles), 'r').readline()
+			with open(random.choice(txtfiles), 'r') as fi:
+				textToType = ''
+				fi.seek(0)
+				for li in fi:
+					textToType += li
 		except:
 			s.menu(f"Invalid folder choice!  Cannot use the directory:  {s.textDirectory}")
-
+		
 		# Definitions
 		textDisplay = tk.Label(s.root, text=f"{textToType}", bg=s.background)
-		typingBox = tk.Text(s.root, bg='#eeeeee')
+
+		typingBox = tk.Text(s.root, height=10,  bg='#eeeeee')
 		typingBox.bind("<Key>", keyFunc)
+		
 		finishButton = tk.Button(s.root, text="Finish", bg=s.background, command=lambda: s.assessSubmission(textToType,typingBox.get("1.0","end")))
+
 		
 		# Placements
-		textDisplay.pack()
-		typingBox.pack()
-		finishButton.pack()
+		textDisplay.pack(pady=5, anchor='s', expand=True)
+		typingBox.pack(padx=50, pady=30, expand=True)
+		finishButton.pack(ipady=5, ipadx=10, anchor='n', expand=True)
 
 		typingBox.focus_set() # Bring text box to focus (user convenience)
 

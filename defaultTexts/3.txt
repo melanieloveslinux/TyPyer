@@ -1,1 +1,6 @@
-I'm also totally not a penguin.
+Open sauce software is very delicious!
+While chefs in 'the business' make very delicious sauce software too,
+there's a unique little charm to open source software,
+where anyone can kind of contribute to making the recipes better,
+or if they please, they may 'fork' the recipe into something they prefer.
+The only part which is a drag, is you need to have equipment to begin cooking.

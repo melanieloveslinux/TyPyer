@@ -1,1 +1,1 @@
-I'm using TyPyer, a very funky typing mini-game.
+I'm using TyPyer, a very funky typing mini-game.  TyPyer is supposed to perform well on old computers.

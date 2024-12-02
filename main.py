@@ -1,6 +1,8 @@
 # Imports
 import tkinter as tk
+from tkinter.font import Font
 import tkinter.filedialog as fd
+import tkinter.scrolledtext as st
 import time
 import random
 import glob
@@ -20,18 +22,32 @@ class bcolors:
 	BOLD = '\033[1m'
 	UNDERLINE = '\033[4m'
 
+motsPool = [
+"Walk slowly, but never backwards.",
+"A balanced diet keeps a healthy mind.",
+"'Mew' - My cat (:",
+"Exercise the mind and body, appreciate yourself.",
+"Check out BBC bitesize for free primary & secondary education. (:",
+"If a text has only one line, you can also press the 'Enter' (return) key to conclude typing.",
+"Hey, because you don't get told this often, you're awesome sauce!
+]
+
 class game():
 	def __init__(s):
 		# Vars
-		s.background = '#99aaaa'
-		s.accuracy = None
+		s.mots = random.choice(motsPool)
+		s.background = '#eeccdd'
 		s.textDirectory = "defaultTexts/*" 
+		s.accuracy = None
 
 		# Window
 		s.root = tk.Tk()
 		s.root.title("TyPyer - ALPHA")
 		s.root.minsize(400, 300)
 		s.root.config(bg=s.background)
+		s.root.columnconfigure(2, weight=3)
+
+		s.mFont = Font(family="Heuristica", size=12) # Must be defined AFTER root is defined ):
 
 		s.menu("0")
 
@@ -39,23 +55,25 @@ class game():
 		s.newScreen()
 
 		# Canvas Item Definitions (Frames then Items)
-		startButton = tk.Button(s.root, text="Start Game", bg=s.background, command=s.inGame)
-		settingsButton = tk.Button(s.root, text="Settings Menu", bg=s.background, command=s.optionMenu)
-		quitButton = tk.Button(s.root, text="Quit Game", bg=s.background, command=lambda: s.root.destroy())
+		motsLab = tk.Label(s.root, font=s.mFont, text=f'Message of The Session:\n\n{s.mots}', bg=s.background)
+		startButton = tk.Button(s.root, font=s.mFont, text="Start Game", bg=s.background, command=s.inGame)
+		settingsButton = tk.Button(s.root, font=s.mFont, text="Settings Menu", bg=s.background, command=s.optionMenu)
+		quitButton = tk.Button(s.root, font=s.mFont, text="Quit Game", bg=s.background, command=lambda: s.root.destroy())
 
 		# Canvas Item Placements
-		startButton.pack(anchor='s', ipady=5, ipadx=10, expand=True)
-		settingsButton.pack(expand=True, ipady=5, ipadx=10)
-		quitButton.pack(anchor='n', ipady=5, ipadx=10, expand=True)
+		motsLab.pack(anchor='s', expand=True)
+		startButton.pack(ipady=5, ipadx=10, expand=True)
+		settingsButton.pack(anchor='n', expand=True, ipady=5, ipadx=10)
 
-		# Conditional Items
-		if crash != "0":
-			crashLab = tk.Label(s.root, bg=s.background, text=crash)
-			crashLab.pack(anchor='n', expand=True)
 		if s.accuracy != None:
 			accuracyLab = tk.Label(s.root, bg=s.background, text=f"Accuracy:  {s.accuracy}%")
 			accuracyLab.pack(anchor='n', expand=True)
 			
+		quitButton.pack(ipady=5, ipadx=10, expand=True)
+
+		if crash != "0":
+			crashLab = tk.Label(s.root, bg=s.background, text=crash)
+			crashLab.pack(anchor='n', expand=True)
 
 	def optionMenu(s):
 		s.newScreen()
@@ -64,8 +82,8 @@ class game():
 			s.textDirectory = str(f"{fd.askdirectory()}/*")
 		
 		# Definitions
-		menuButton = tk.Button(s.root, text="Main Menu", bg=s.background, command=lambda: s.menu("0"))
-		getDirButton = tk.Button(s.root, text="Select Folder", bg=s.background, command=getDir)
+		menuButton = tk.Button(s.root, font=s.mFont, text="Main Menu", bg=s.background, command=lambda: s.menu("0"))
+		getDirButton = tk.Button(s.root, font=s.mFont, text="Select Folder", bg=s.background, command=getDir)
 		
 		# Placements
 		menuButton.pack(anchor='s', expand=True)
@@ -83,13 +101,16 @@ class game():
 
 	def inGame(s):	
 		s.newScreen()
-		
+	
+		linesInFile = 0
+
 		# TODO Fix Ctrl + Backspace not deleting full words
 		def keyFunc(event):
 			#print(repr(event.char).strip('\n'))
 			# User complete text with return key.
-			if repr(event.char) == "'\\r'":
-				s.assessSubmission(textToType,typingBox.get("1.0","end"))
+			if linesInFile <= 1:
+				if repr(event.char) == "'\\r'":
+					s.assessSubmission(textToType,typingBox.get("1.0","end"))
 
 		# Grab random file from directory
 		# TODO Fix selecting folders outside of the TyPyer folder & selecting folders as 'files to open'.
@@ -99,17 +120,20 @@ class game():
 				textToType = ''
 				fi.seek(0)
 				for li in fi:
+					linesInFile += 1
 					textToType += li
 		except:
 			s.menu(f"Invalid folder choice!  Cannot use the directory:  {s.textDirectory}")
 		
 		# Definitions
-		textDisplay = tk.Label(s.root, text=f"{textToType}", bg=s.background)
+		textDisplay = st.ScrolledText(s.root, font=s.mFont, bg=s.background, height=min(linesInFile, 8))
+		textDisplay.insert(tk.INSERT, textToType)
+		textDisplay['state'] = 'disable'
 
-		typingBox = tk.Text(s.root, height=10,  bg='#eeeeee')
+		typingBox = tk.Text(s.root, height=10, font=s.mFont, bg='#eeeeee')
 		typingBox.bind("<Key>", keyFunc)
 		
-		finishButton = tk.Button(s.root, text="Finish", bg=s.background, command=lambda: s.assessSubmission(textToType,typingBox.get("1.0","end")))
+		finishButton = tk.Button(s.root, font=s.mFont, text="Finish", bg=s.background, command=lambda: s.assessSubmission(textToType,typingBox.get("1.0","end")))
 
 		
 		# Placements

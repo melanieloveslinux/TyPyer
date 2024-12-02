@@ -29,7 +29,7 @@ motsPool = [
 "Exercise the mind and body, appreciate yourself.",
 "Check out BBC bitesize for free primary & secondary education. (:",
 "If a text has only one line, you can also press the 'Enter' (return) key to conclude typing.",
-"Hey, because you don't get told this often, you're awesome sauce!
+"Hey, because you don't get told this often, you're awesome sauce!"
 ]
 
 class game():

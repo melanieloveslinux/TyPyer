@@ -126,7 +126,7 @@ class game():
 			s.menu(f"Invalid folder choice!  Cannot use the directory:  {s.textDirectory}")
 		
 		# Definitions
-		textDisplay = st.ScrolledText(s.root, font=s.mFont, bg=s.background, height=min(linesInFile, 8))
+		textDisplay = st.ScrolledText(s.root, font=s.mFont, bg=s.background, height=min(linesInFile*4, 16))
 		textDisplay.insert(tk.INSERT, textToType)
 		textDisplay['state'] = 'disable'
 

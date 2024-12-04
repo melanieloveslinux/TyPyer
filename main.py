@@ -92,6 +92,11 @@ class game():
 
 	def assessSubmission(s, originalText, userText):
 		correctText = 0
+		
+		# Fix the 'new line' chars messing with the accuracy.
+		userText = userText.strip('\n')
+		originalText = originalText.strip('\n')
+
 		for x in range(0, min(len(originalText), len(userText))):
 			if userText[x] == originalText[x]:
 				correctText += 1

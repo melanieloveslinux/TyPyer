@@ -40,6 +40,8 @@ motsPool = [
 "If a text has only one line, you can also press the 'Enter' (return) key to conclude typing."
 ]
 
+os.system('mpg123 ding.mp3')
+
 class game():
 	def __init__(s):
 		# Vars
@@ -82,7 +84,6 @@ class game():
 		if crash != "0":
 			crashLab = tk.Label(s.root, bg=s.background, text=crash)
 			crashLab.pack(anchor='n', expand=True)
-		os.system('mpg123 ding.mp3')
 
 	def optionMenu(s):
 		s.newScreen()

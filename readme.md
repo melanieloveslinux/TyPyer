@@ -17,6 +17,7 @@ This does mean that yes, you may create your own .txt files to type out!  (Becau
 To make TyPyer work you simply need Python and Tkinter installed.  Here's a short guide on how to install them depending on your operating system (Windows, or Linux):
 
 Windows:
+- [!] There is a start-up sound which plays using mpg123, this program may crash under Windows, if so, you may need to download the program from [their website](https://mpg123.de/download.shtml).
 - Python:  Python can be downloaded from the official website, [click here to visit](https://www.python.org/downloads/).
 - Tkinter:  Tkinter should work perfectly fine after installing Python!
 - Heuristica:  Heuristica, and any font on Windows, can be installed by right clicking its .zip file.  You may get Heuristica's file from [Font Squirrel](https://www.fontsquirrel.com/fonts/euristic)

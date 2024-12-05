@@ -1,12 +1,12 @@
 # Imports
 import tkinter as tk
+import tkinter.filedialog as fd # User file choice
+import tkinter.scrolledtext as st # Text display
 from tkinter.font import Font
-import tkinter.filedialog as fd
-import tkinter.scrolledtext as st
 import time
-import random
-import glob
-
+import random # Random file selection
+import glob # Recursive folder searching (files)
+import os # Used to play start-up sound (I WOULD LOVE FOR THIS TO RUN ALONGSIDE THE APP BUT TKINTER DOESN'T LIKE THAT)
 
 
 # Classes
@@ -26,10 +26,18 @@ motsPool = [
 "Walk slowly, but never backwards.",
 "A balanced diet keeps a healthy mind.",
 "'Mew' - My cat (:",
+"Foxes are cute! <3",
+"Freedom is privledge unless enjoyed by one and all!",
+"As cute as a kitten, as smart as a crow. ^_^",
+"The first 365 days of the year are always the hardest.",
+"TyPyer is made with a little Gallium and Yttrium",
+"I got too silly. ):",
+"There are 10 angels in the world, 5 are playing, 4 are sleeping, and 1 is reading this!",
 "Exercise the mind and body, appreciate yourself.",
+"Homemade food always tastes the best. <3",
 "Check out BBC bitesize for free primary & secondary education. (:",
-"If a text has only one line, you can also press the 'Enter' (return) key to conclude typing.",
-"Hey, because you don't get told this often, you're awesome sauce!"
+"Hey, because you don't get told this often, you're awesome sauce!",
+"If a text has only one line, you can also press the 'Enter' (return) key to conclude typing."
 ]
 
 class game():
@@ -43,7 +51,7 @@ class game():
 		# Window
 		s.root = tk.Tk()
 		s.root.title("TyPyer - ALPHA")
-		s.root.minsize(400, 300)
+		s.root.minsize(800, 600)
 		s.root.config(bg=s.background)
 		s.root.columnconfigure(2, weight=3)
 
@@ -74,6 +82,7 @@ class game():
 		if crash != "0":
 			crashLab = tk.Label(s.root, bg=s.background, text=crash)
 			crashLab.pack(anchor='n', expand=True)
+		os.system('mpg123 ding.mp3')
 
 	def optionMenu(s):
 		s.newScreen()
